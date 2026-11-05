@@ -12,6 +12,6 @@ Official organizational website and public legal compliance repository for **Hur
 *(Legacy endpoints `eula.html` and `privacy.html` automatically redirect to the BloodHawk-specific documents above).*
 
 ## Corporate Information
-- **Legal Entity:** Hurley Data and Research Consulting LLC
+- **Legal Entity:** Hurley Data and Research Consulting LLC (Established 2007)
 - **Principal Office:** 679 Hickory Circle, Wahoo, NE 68066, United States of America
 - **Official Support Email:** `HDRConsulting.support@gmail.com`
