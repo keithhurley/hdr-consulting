@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hurley Data and Research Consulting LLC (HDR Consulting)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #0B0F17;
+      --bg-surface: #161F30;
+      --bg-card: #111827;
+      --border-subtle: #334155;
+      --border-muted: #475569;
+      --nav-cyan: #38BDF8;
+      --nav-cyan-dark: #0284C7;
+      --accuracy-emerald: #34D399;
+      --blood-crimson: #EF4444;
+      --last-amber: #FBBF24;
+      --text-white: #F8FAFC;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* NAVIGATION */
+    nav {
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(11, 15, 23, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand span {
+      color: var(--nav-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--nav-cyan);
+    }
+
+    .btn-nav {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-muted);
+      color: var(--nav-cyan) !important;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      background: var(--nav-cyan);
+      color: var(--bg-deep) !important;
+      border-color: var(--nav-cyan);
+    }
+
+    /* HERO SECTION */
+    .hero {
+      padding: 72px 0 48px;
+      text-align: center;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 9999px;
+      color: var(--nav-cyan);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--nav-cyan), var(--accuracy-emerald));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.18rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--blood-crimson);
+      color: var(--text-white);
+      padding: 12px 26px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #DC2626;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-white);
+      border: 1px solid var(--border-subtle);
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--nav-cyan);
+      color: var(--nav-cyan);
+    }
+
+    /* CARDS & GRIDS */
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 56px 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: block;
+      width: 4px;
+      height: 24px;
+      background: var(--nav-cyan);
+      border-radius: 2px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .feature-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .tag-crimson { background: rgba(239, 68, 68, 0.15); color: var(--blood-crimson); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .tag-cyan { background: rgba(56, 189, 248, 0.15); color: var(--nav-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-emerald { background: rgba(52, 211, 153, 0.15); color: var(--accuracy-emerald); border: 1px solid rgba(52, 211, 153, 0.3); }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      margin-bottom: 16px;
+    }
+
+    .card-link {
+      color: var(--nav-cyan);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.92rem;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    /* PRODUCT HERO CARD */
+    .product-hero-card {
+      background: linear-gradient(180deg, #161F30 0%, var(--bg-card) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 32px;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .product-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-white);
+    }
+
+    .product-title span {
+      color: var(--blood-crimson);
+    }
+
+    .specs-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .specs-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+    }
+
+    .specs-list li strong {
+      color: var(--text-white);
+    }
+
+    .check-icon {
+      color: var(--accuracy-emerald);
+      font-weight: bold;
+    }
+
+    /* ADDRESS BOX */
+    .address-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-top: 16px;
+    }
+
+    .address-box strong {
+      color: var(--text-white);
+    }
+
+    .address-box a {
+      color: var(--nav-cyan);
+      text-decoration: none;
+    }
+
+    .address-box a:hover {
+      text-decoration: underline;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 48px 0;
+      margin-top: 64px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--nav-cyan);
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        HDR<span>CONSULTING</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#bloodhawk">BloodHawk™</a>
+        <a href="#legal">Legal &amp; Privacy</a>
+        <a href="#contact" class="btn-nav">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="container hero">
+    <div class="pill-badge">Nebraska Limited Liability Company &bull; Est. 2026</div>
+    <h1>Hurley Data and Research <span>Consulting LLC</span></h1>
+    <p>
+      Specialized computer vision engineering, edge sensor telemetry, and resilient, privacy-first software solutions built for demanding real-world environments.
+    </p>
+    <div class="hero-actions">
+      <a href="#bloodhawk" class="btn-primary">View BloodHawk™ Mobile App</a>
+      <a href="#legal" class="btn-secondary">Compliance &amp; Legal Center</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ABOUT SECTION -->
+    <section id="about">
+      <h2 class="section-title">Corporate Overview &amp; Capabilities</h2>
+      <div class="card">
+        <p>
+          <strong>Hurley Data and Research Consulting LLC</strong> (also operating as <strong>HDR Consulting LLC</strong>) is an independent software and research consultancy based in Wahoo, Nebraska, USA. We design and deliver production-grade software architectures focusing on local edge intelligence, zero-exfiltration data privacy, and robust telemetry systems.
+        </p>
+        <div class="grid-2" style="margin-top: 24px;">
+          <div>
+            <span class="feature-tag tag-cyan">Core Capability</span>
+            <h3>Edge Computer Vision &amp; Native C++</h3>
+            <p>
+              High-throughput image processing and optical feature segmentation running directly on mobile hardware via native OpenCV/C++ without dependency on remote cloud servers.
+            </p>
+          </div>
+          <div>
+            <span class="feature-tag tag-emerald">Core Capability</span>
+            <h3>Field Telemetry &amp; Offline Spatial Systems</h3>
+            <p>
+              Low-power GPS sensor fusion, hardware compass stabilization, and tile-cached cartographic engines designed for reliable performance in remote, disconnected backcountry settings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FLAGSHIP PRODUCT: BLOODHAWK -->
+    <section id="bloodhawk">
+      <h2 class="section-title">Featured Product: BloodHawk™</h2>
+      <div class="product-hero-card">
+        <div class="product-header">
+          <div>
+            <span class="feature-tag tag-crimson">Flagship Android App</span>
+            <div class="product-title">BLOOD<span>HAWK</span>™ Optical Wildlife Recovery</div>
+          </div>
+          <a href="https://github.com/keithhurley/BloodHawk-Release/releases/latest" class="btn-primary" target="_blank" rel="noopener">Download APK Release &rarr;</a>
+        </div>
+        <p>
+          BloodHawk™ is a professional supplementary optical tool designed for ethical hunters and wildlife trackers. It combines multi-stage color space segmentation (HSV &amp; LAB) with real-time video simulation and diagnostic hit-site analysis to aid in post-shot game recovery.
+        </p>
+
+        <ul class="specs-list">
+          <li>
+            <span class="check-icon">&#10003;</span>
+            <div><strong>100% On-Device Processing:</strong> Camera analysis runs entirely on local handset silicon. Camera images and private coordinates never leave your device.</div>
+          </li>
+          <li>
+            <span class="check-icon">&#10003;</span>
+            <div><strong>Native C++ Engine:</strong> Custom high-performance OpenCV native pipeline optimized for multi-core ARM64 architectures.</div>
+          </li>
+          <li>
+            <span class="check-icon">&#10003;</span>
+            <div><strong>Offline Topo Cartography:</strong> Built-in regional map tile caching for navigating dense canopy and remote public/private lands without cellular coverage.</div>
+          </li>
+          <li>
+            <span class="check-icon">&#10003;</span>
+            <div><strong>Diagnostic Hit Advisor:</strong> Integrated veterinary sign reference assisting trackers in assessing vital sign characteristics and tracking delay strategy.</div>
+          </li>
+        </ul>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px;">
+          <a href="eula.html" class="card-link" style="color: var(--nav-cyan);">Read BloodHawk™ EULA &rarr;</a>
+          <span style="color: var(--border-muted);">&bull;</span>
+          <a href="privacy.html" class="card-link" style="color: var(--accuracy-emerald);">Read BloodHawk™ Privacy Policy &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGAL & COMPLIANCE HUB -->
+    <section id="legal">
+      <h2 class="section-title">Legal Compliance &amp; Policy Center</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">
+        Hurley Data and Research Consulting LLC is committed to transparent legal terms, robust user privacy protections, and strict adherence to Google Play Store and consumer protection standards.
+      </p>
+
+      <div class="grid-2">
+        <div class="card">
+          <span class="feature-tag tag-crimson">End User License Agreement</span>
+          <h3>BloodHawk™ EULA</h3>
+          <p>
+            Governs the installation, permitted non-commercial recreational use, age eligibility (18+), weapon and field safety disclaimers, and Nebraska venue terms for BloodHawk™.
+          </p>
+          <a href="eula.html" class="card-link" style="color: var(--blood-crimson);">Review Full EULA &rarr;</a>
+        </div>
+
+        <div class="card">
+          <span class="feature-tag tag-emerald">Privacy Policy</span>
+          <h3>BloodHawk™ Privacy Policy</h3>
+          <p>
+            Details our zero-exfiltration on-device processing model, local-only storage practices, transparent third-party map tile fetching, and support correspondence handling.
+          </p>
+          <a href="privacy.html" class="card-link" style="color: var(--accuracy-emerald);">Review Privacy Policy &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+      <h2 class="section-title">Contact &amp; Corporate Office</h2>
+      <div class="card">
+        <p>
+          For general business inquiries, technical support, legal correspondence, or regulatory compliance questions, contact our corporate office:
+        </p>
+
+        <div class="address-box">
+          <strong>Hurley Data and Research Consulting LLC</strong><br />
+          Attn: Legal Compliance &amp; Developer Support<br />
+          679 Hickory Circle<br />
+          Wahoo, NE 68066<br />
+          United States of America<br />
+          Email: <a href="mailto:HDRConsulting.support@gmail.com">HDRConsulting.support@gmail.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="eula.html">BloodHawk™ EULA</a>
+        <a href="privacy.html">BloodHawk™ Privacy Policy</a>
+        <a href="mailto:HDRConsulting.support@gmail.com">Support</a>
+      </div>
+      <p>
+        Copyright &copy; 2026 Hurley Data and Research Consulting LLC &bull; 679 Hickory Circle, Wahoo, NE 68066, USA &bull; All Rights Reserved.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
