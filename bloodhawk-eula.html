@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BloodHawk™ End User License Agreement (EULA) — Hurley Data and Research Consulting LLC</title>
+  <meta name="description" content="Official End User License Agreement (EULA) for the BloodHawk™ optical tracking and wildlife recovery application by Hurley Data and Research Consulting LLC." />
+  <style>
+    :root {
+      /* Official BloodHawkPalette 6-Color Semantic System & OLED Foundations */
+      --bg-deep: #0B0F17;
+      --bg-surface: #161F30;
+      --bg-card: #111827;
+      --border-subtle: #334155;
+      --border-muted: #475569;
+      --text-white: #F8FAFC;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --blood-crimson: #EF4444;
+      --blood-crimson-dark: #DC2626;
+      --nav-cyan: #38BDF8;
+      --nav-cyan-dark: #0284C7;
+      --last-amber: #FBBF24;
+      --accuracy-emerald: #34D399;
+      --pause-orange: #F97316;
+      --foliage-green: #10B981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-secondary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      padding: 28px 16px 64px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      background-color: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 28px 28px 24px;
+      margin-bottom: 24px;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: 0.03em;
+    }
+
+    .brand-title span {
+      color: var(--blood-crimson);
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: var(--bg-surface);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .badge-emerald {
+      color: var(--accuracy-emerald);
+      border: 1px solid var(--accuracy-emerald);
+    }
+
+    .badge-cyan {
+      color: var(--nav-cyan);
+      border: 1px solid var(--nav-cyan);
+    }
+
+    .badge-crimson {
+      color: var(--blood-crimson);
+      border: 1px solid var(--blood-crimson);
+    }
+
+    .badge-amber {
+      color: var(--last-amber);
+      border: 1px solid var(--last-amber);
+    }
+
+    .badge-orange {
+      color: var(--pause-orange);
+      border: 1px solid var(--pause-orange);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+      margin-top: 12px;
+    }
+
+    .meta-row strong {
+      color: var(--text-white);
+    }
+
+    .hero-warning {
+      background-color: var(--bg-card);
+      border: 2px solid var(--pause-orange);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .hero-warning h2 {
+      color: var(--last-amber);
+      font-size: 1.22rem;
+      margin: 8px 0 12px;
+    }
+
+    .pledge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .pledge-box {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .pledge-box h3 {
+      color: var(--text-white);
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    .pledge-box p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    .toc-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .toc-card h2 {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 8px 20px;
+      list-style: none;
+    }
+
+    .toc-list a {
+      color: var(--nav-cyan);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .toc-list a:hover {
+      text-decoration: underline;
+    }
+
+    section.policy-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+
+    section.policy-card h2 {
+      color: var(--text-white);
+      font-size: 1.18rem;
+      margin: 8px 0 12px;
+    }
+
+    section.policy-card h3 {
+      color: var(--text-white);
+      font-size: 1rem;
+      margin: 18px 0 8px;
+    }
+
+    section.policy-card p {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    section.policy-card ul {
+      margin: 8px 0 14px 20px;
+    }
+
+    section.policy-card li {
+      margin-bottom: 8px;
+      font-size: 0.94rem;
+    }
+
+    section.policy-card li strong {
+      color: var(--text-white);
+    }
+
+    .address-box {
+      background-color: var(--bg-surface);
+      border-left: 3px solid var(--nav-cyan);
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin: 12px 0;
+      color: var(--text-white);
+      font-size: 0.94rem;
+    }
+
+    .legal-caps {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 12px 0;
+      color: var(--text-white);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div style="margin-bottom: 12px;"><a href="index.html" style="color: var(--nav-cyan); text-decoration: none; font-size: 0.9rem; font-weight: 600;">&larr; Back to HDR Consulting LLC Home</a></div>
+      <div class="header-top">
+        <div class="brand-title">BLOOD<span>HAWK</span>™ END USER LICENSE AGREEMENT</div>
+        <span class="badge badge-crimson">Strictly 18+</span>
+      </div>
+      <p>
+        This End User License Agreement ("Agreement" or "EULA") is a legal contract between you ("you" or "user") and <strong>Hurley Data and Research Consulting LLC</strong> ("Licensor," "HDRC," "we," "us," or "our") governing your installation and use of the <strong>BloodHawk™</strong> mobile application.
+      </p>
+      <div class="meta-row">
+        <div><strong>Licensor:</strong> Hurley Data and Research Consulting LLC</div>
+        <div><strong>Address:</strong> 679 Hickory Circle, Wahoo, NE 68066, USA</div>
+        <div><strong>Contact Email:</strong> <a href="mailto:HDRConsulting.support@gmail.com" style="color: var(--nav-cyan);">HDRConsulting.support@gmail.com</a></div>
+        <div><strong>Effective Date:</strong> November 1, 2026</div>
+        <div><strong>Audience:</strong> United States</div>
+        <div><strong>Governing Law:</strong> State of Nebraska (Saunders County Exclusive Venue)</div>
+        <div><strong>Companion Policy:</strong> <a href="bloodhawk-privacy.html" style="color: var(--accuracy-emerald); font-weight: 700; text-decoration: none;">View BloodHawk™ Privacy Policy &rarr;</a></div>
+      </div>
+    </header>
+
+    <!-- CRITICAL NOTICE SUMMARY -->
+    <div class="hero-warning" id="summary">
+      <span class="badge badge-orange">Important Notice</span>
+      <h2>⚠️ Critical Field Safety, Eligibility &amp; Legal Terms</h2>
+      <p>
+        Please review this Agreement carefully before using BloodHawk™ in the field:
+      </p>
+      <div class="pledge-grid">
+        <div class="pledge-box">
+          <h3>🔞 18+ Eligibility</h3>
+          <p>You must be at least 18 years of age and legally competent to enter into this Agreement.</p>
+        </div>
+        <div class="pledge-box">
+          <h3>🧭 Supplementary Aid</h3>
+          <p>BloodHawk™ is an informational optical tool. It is not an emergency beacon, compass replacement, or guarantee of game recovery.</p>
+        </div>
+        <div class="pledge-box">
+          <h3>🚫 Land Access</h3>
+          <p>Map tiles do not represent legal property surveys. Verify boundaries and obtain permission where required before entering land.</p>
+        </div>
+        <div class="pledge-box">
+          <h3>⚖️ Governing Law</h3>
+          <p>Section 9 establishes Nebraska governing law, exclusive venue in Saunders County, NE, and an individual class action waiver.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc-card" aria-label="Table of Contents">
+      <h2>Agreement Sections</h2>
+      <ul class="toc-list">
+        <li><a href="#section-1">1. Acceptance &amp; Eligibility (18+)</a></li>
+        <li><a href="#section-2">2. License Grant &amp; Restrictions</a></li>
+        <li><a href="#section-3">3. Field Safety &amp; Inherent Risks</a></li>
+        <li><a href="#section-4">4. Lawful Hunting &amp; Land Access</a></li>
+        <li><a href="#section-5">5. Prohibited Uses</a></li>
+        <li><a href="#section-6">6. Privacy, Local Data &amp; Purchases</a></li>
+        <li><a href="#section-7">7. Intellectual Property &amp; Open Source</a></li>
+        <li><a href="#section-8">8. Warranties, Liability &amp; Consumer Rights</a></li>
+        <li><a href="#section-9">9. Governing Law &amp; Venue</a></li>
+      </ul>
+    </nav>
+
+    <!-- SECTION 1 -->
+    <section class="policy-card" id="section-1">
+      <span class="badge badge-crimson">Section 1</span>
+      <h2>1. Acceptance &amp; Eligibility</h2>
+      <h3>1.1 Binding Contract</h3>
+      <p>
+        This Agreement is a legal contract between you ("you" or "user") and <strong>Hurley Data and Research Consulting LLC</strong> ("HDRC," "we," "us," or "our"), governing your use of the <strong>BloodHawk™</strong> mobile application, including updates and documentation (the "App"). By tapping "Accept," you agree to this Agreement and our <a href="bloodhawk-privacy.html" style="color: var(--accuracy-emerald);">BloodHawk™ Privacy Policy</a>. If you do not agree, do not use the App, and remove it from your device.
+      </p>
+      <h3>1.2 Strictly 18+ Years of Age</h3>
+      <p>
+        BloodHawk™ is intended solely for adult hunters and outdoorspersons in the United States. You represent and warrant that you are at least <strong>18 years of age</strong> and possess the legal capacity to enter into this Agreement.
+      </p>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="policy-card" id="section-2">
+      <span class="badge badge-cyan">Section 2</span>
+      <h2>2. License Grant &amp; Restrictions</h2>
+      <h3>2.1 License Grant</h3>
+      <p>
+        Subject to your compliance with this Agreement and Google Play Store terms, HDRC grants you a personal, non-exclusive, non-transferable, limited license to install and use the App on compatible Android devices that you own or control, solely for personal, non-commercial recreational hunting and wildlife recovery activities. This license is terminable under Section 9.4 and includes standard app store reinstalls and family sharing where supported by Google Play.
+      </p>
+      <h3>2.2 Restrictions</h3>
+      <p>
+        Except to the extent permitted by applicable law or the open-source licenses governing third-party components included in the App, you shall not:
+      </p>
+      <ul>
+        <li>Decompile, disassemble, or reverse engineer the App;</li>
+        <li>Modify, adapt, or create derivative works of the App;</li>
+        <li>Rent, lease, sell, sublicense, or commercially exploit the App (such as offering paid tracking services) without separate written permission from HDRC;</li>
+        <li>Remove or alter any proprietary notices, safety warnings, or age verification controls in the App; or</li>
+        <li>Use automated scripts to bulk-download or scrape third-party map services through the App.</li>
+      </ul>
+      <p>
+        These restrictions do not limit rights granted by applicable law or the licenses governing third-party components.
+      </p>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="policy-card" id="section-3">
+      <span class="badge badge-orange">Section 3</span>
+      <h2>3. Field Safety, Operational Limitations &amp; Inherent Risks</h2>
+      <h3>3.1 Supplementary Aid Only</h3>
+      <p>
+        BloodHawk™ is designed to assist users in visually scanning for possible blood sign and referencing terrain during lawful game recovery. It is <strong>not</strong> a certified navigation, survival, or emergency tool. Always carry standard wilderness essentials, including a physical magnetic compass, paper maps, reliable lighting, weather-appropriate gear, and an emergency communication device.
+      </p>
+      <h3>3.2 Probabilistic Detection &amp; Technical Limitations</h3>
+      <ul>
+        <li><strong>False Positives:</strong> Natural materials (such as fallen leaves, berries, bark, red clay, lichen, or rust) may trigger optical alerts, visual reticles, haptic pulses, or audio signals.</li>
+        <li><strong>False Negatives:</strong> Blood sign may fail to register due to oxidation, rain, snow, heavy duff, shadows, motion blur, torch light characteristics, or distance from the target.</li>
+        <li><strong>No Guarantee:</strong> HDRC makes no warranty or guarantee that the App will detect blood, maintain a continuous trail, or result in the recovery of any animal.</li>
+        <li><strong>Sensors &amp; Battery:</strong> GPS accuracy varies with forest canopy, terrain, and weather. Compass sensors are subject to magnetic interference from firearms, bows, and metallic gear. Extended camera and screen use, particularly in cold temperatures, can drain device batteries rapidly.</li>
+      </ul>
+      <h3>3.3 Inherent Outdoor Risks &amp; Bodily Harm Disclaimer</h3>
+      <p>
+        Outdoor activities, hunting, and tracking wild game carry inherent risks, including rough terrain, falls, extreme weather, hypothermia, water hazards, weapon accidents, and encounters with wounded or dangerous wildlife. Never look at your device while walking or navigating obstacles. Maintain constant situational awareness and stable footing.
+      </p>
+      <div class="legal-caps">
+        TO THE MAXIMUM EXTENT PERMITTED BY LAW, YOU VOLUNTARILY AND EXPRESSLY ASSUME ALL INHERENT RISKS OF HUNTING, TRACKING, AND WILDERNESS RECOVERY. HDRC SHALL HAVE NO LIABILITY FOR PERSONAL INJURY, BODILY HARM, ILLNESS, PERMANENT DISABILITY, OR ACCIDENTAL DEATH ARISING OUT OF OR RELATING TO YOUR USE OF OR RELIANCE ON THE APP, TERRAIN CONDITIONS, WEAPONS HANDLING, OR ENCOUNTERS WITH WILDLIFE.
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="policy-card" id="section-4">
+      <span class="badge badge-amber">Section 4</span>
+      <h2>4. Lawful Hunting, Weapon Safety &amp; Land Access</h2>
+      <h3>4.1 Hunting Regulations &amp; Weapon Safety</h3>
+      <p>
+        Hunting regulations, legal tracking hours, and restrictions on artificial lighting or electronic tracking devices vary by jurisdiction. You are responsible for verifying and complying with all applicable wildlife laws, tag requirements, and equipment regulations in your hunting area.
+      </p>
+      <p>
+        <strong>Never handle your phone while holding a loaded firearm or a drawn/nocked bow.</strong> Always place firearms on safe, securely stow weapons, and verify your surroundings before viewing the App.
+      </p>
+      <h3>4.2 Land Access &amp; Boundaries</h3>
+      <p>
+        Map layers provided in the App are for general informational and terrain reference only. <strong>They do not represent legal boundary surveys or parcel ownership.</strong> Do not assume that wounded game crossing a boundary authorizes you to enter the land. Verify applicable boundaries and access rules, and obtain permission where required before entering land.
+      </p>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section class="policy-card" id="section-5">
+      <span class="badge badge-crimson">Section 5</span>
+      <h2>5. Prohibited Uses</h2>
+      <p>
+        BloodHawk™ is intended exclusively for lawful recreational wildlife recovery. You agree <strong>not</strong> to use the App:
+      </p>
+      <ul>
+        <li>As a medical, clinical, or diagnostic tool for human or domestic animal bleeding, injury, or triage;</li>
+        <li>For forensic, crime-scene, or law-enforcement investigation; or</li>
+        <li>For human search-and-rescue (SAR) operations. In any human emergency, immediately contact your local emergency services (e.g., 911).</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 6 -->
+    <section class="policy-card" id="section-6">
+      <span class="badge badge-emerald">Section 6</span>
+      <h2>6. Privacy, Local Data &amp; Purchases</h2>
+      <h3>6.1 On-Device Processing</h3>
+      <p>
+        Camera image analysis occurs locally on your device. HDRC does not receive your live camera feed, captured diagnostic photos, or saved recovery trails.
+      </p>
+      <h3>6.2 Third-Party Services &amp; User Exports</h3>
+      <p>
+        Online map layers connect directly to public cartographic services (such as USGS National Map and OpenStreetMap) to retrieve tiles requested by your device. For full details on network activity, please review our <a href="bloodhawk-privacy.html" style="color: var(--accuracy-emerald);">BloodHawk™ Privacy Policy</a>.
+      </p>
+      <p>
+        <strong>No Cloud Backup:</strong> HDRC does not maintain cloud storage or backups of your recovery sessions. You are responsible for exporting your trails and custom profiles. Deleting the App or clearing local storage may permanently delete records that you have not exported or otherwise backed up.
+      </p>
+      <h3>6.3 Purchases &amp; Updates</h3>
+      <p>
+        BloodHawk™ is distributed via the Google Play Store. Purchases, refunds, and app updates are handled through Google Play in accordance with Google Play's terms of service and applicable consumer protection laws.
+      </p>
+    </section>
+
+    <!-- SECTION 7 -->
+    <section class="policy-card" id="section-7">
+      <span class="badge badge-cyan">Section 7</span>
+      <h2>7. Intellectual Property &amp; Third-Party Materials</h2>
+      <h3>7.1 HDRC Ownership</h3>
+      <p>
+        HDRC owns the App and its original content, interface design, visual styling, detection algorithms, and procedural audio feedback, excluding third-party materials, which remain subject to their respective ownership and license terms (<a href="index.html" style="color: var(--nav-cyan);">HDR Consulting Home</a> &bull; Copyright &copy; 2026 Hurley Data and Research Consulting LLC. All rights reserved).
+      </p>
+      <h3>7.2 Third-Party Components</h3>
+      <p>
+        The App incorporates open-source libraries (including OpenCV under the Apache 2.0 license and components under BSD licenses) and cartographic data (USGS and OpenStreetMap contributors under ODbL 1.0). Full licenses and attributions are viewable inside the App under <strong>Help &gt; Credits &amp; Legal</strong>.
+      </p>
+    </section>
+
+    <!-- SECTION 8 -->
+    <section class="policy-card" id="section-8">
+      <span class="badge badge-orange">Section 8</span>
+      <h2>8. Warranties, Limitation of Liability &amp; Consumer Rights</h2>
+      <h3>8.1 "AS IS" Disclaimer</h3>
+      <div class="legal-caps">
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE APP IS PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, OR NON-INFRINGEMENT. HDRC DOES NOT WARRANT THAT THE APP WILL BE UNINTERRUPTED, ACCURATE, ERROR-FREE, OR CAPABLE OF LOCATING WOUNDED GAME.
+      </div>
+      <h3>8.2 Limitation of Liability &amp; Bodily Injury Disclaimer</h3>
+      <div class="legal-caps">
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL HURLEY DATA AND RESEARCH CONSULTING LLC, ITS OFFICERS, MANAGERS, MEMBERS, OR EMPLOYEES BE LIABLE FOR: (1) PERSONAL INJURY, BODILY HARM, ILLNESS, DISABILITY, OR ACCIDENTAL DEATH ARISING FROM FIELD USE, HUNTING, WEAPONS, TERRAIN, OR WILDLIFE; (2) ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES; (3) LOSS OF GAME, PERMITS, GUIDE FEES, OR EQUIPMENT; (4) LOSS OF DATA OR DEVICE DAMAGE; OR (5) FINES, PENALTIES, OR CITATIONS ARISING FROM HUNTING, WEAPON, OR TRESPASSING VIOLATIONS.
+      </div>
+      <p>
+        <strong>Cumulative Cap:</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW, HDRC'S TOTAL AGGREGATE LIABILITY FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE APP SHALL NOT EXCEED FIFTY U.S. DOLLARS ($50.00 USD).
+      </p>
+      <div class="legal-caps">
+        <strong>PERSONAL NON-RECOURSE:</strong> YOU AGREE THAT YOUR SOLE AND EXCLUSIVE RECOURSE FOR ANY CLAIM, LIABILITY, OR DISPUTE ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE APP IS AGAINST THE ASSETS OF HURLEY DATA AND RESEARCH CONSULTING LLC. YOU EXPRESSLY WAIVE ANY RIGHT TO SUE, BRING CLAIMS, OR SEEK PERSONAL MONETARY RECOVERY AGAINST ANY INDIVIDUAL MEMBER, OWNER, MANAGER, DEVELOPER, OFFICER, OR EMPLOYEE PERSONALLY.
+      </div>
+      <h3>8.3 Non-Waivable Consumer Protections</h3>
+      <p>
+        <strong>Nothing in this Agreement excludes or limits any statutory consumer rights or liabilities that cannot be lawfully excluded or limited under applicable law.</strong>
+      </p>
+      <h3>8.4 User Indemnity</h3>
+      <p>
+        To the extent permitted by law, you agree to indemnify and hold harmless Hurley Data and Research Consulting LLC and its representatives from third-party claims, liabilities, damages, or expenses (including reasonable attorneys' fees) to the extent caused by your unlawful conduct, willful misconduct, violation of hunting or trespassing laws, or material breach of this Agreement. This obligation does not apply to the extent a claim results from HDRC's negligence, willful misconduct, or breach of this Agreement.
+      </p>
+    </section>
+
+    <!-- SECTION 9 -->
+    <section class="policy-card" id="section-9">
+      <span class="badge badge-crimson">Section 9</span>
+      <h2>9. Governing Law, Venue &amp; General Terms</h2>
+      <h3>9.1 Governing Law &amp; Exclusive Venue</h3>
+      <p>
+        This Agreement and any dispute arising from it or your use of the App shall be governed by and construed in accordance with the laws of the <strong>State of Nebraska, USA</strong>, without regard to conflict-of-law principles.
+      </p>
+      <p>
+        You and Hurley Data and Research Consulting LLC agree that any legal action, suit, or proceeding arising out of or relating to this Agreement or the App shall be instituted exclusively in the state or federal courts located in or serving <strong>Saunders County, Nebraska</strong>, and both parties irrevocably consent to the personal jurisdiction and venue of those courts.
+      </p>
+      <h3>9.2 Class Action &amp; Jury Trial Waiver</h3>
+      <p>
+        All claims and disputes must be resolved on an individual basis. Neither you nor Hurley Data and Research Consulting LLC may participate as a plaintiff or class member in any class, collective, consolidated, or representative proceeding. Both parties waive any right to a trial by jury to the maximum extent permitted by law.
+      </p>
+      <h3>9.3 One-Year Time Limitation on Claims</h3>
+      <div class="legal-caps">
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, ANY CLAIM, CAUSE OF ACTION, SUIT, OR PROCEEDING ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE APP MUST BE COMMENCED WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES. IF NOT COMMENCED WITHIN THAT ONE-YEAR PERIOD, SUCH CLAIM OR CAUSE OF ACTION IS PERMANENTLY AND IRREVOCABLY BARRED.
+      </div>
+      <h3>9.4 Termination &amp; Changes</h3>
+      <p>
+        <strong>Termination:</strong> HDRC may terminate your license upon your material breach of this Agreement. You may terminate it at any time by uninstalling the App. Upon termination, you must stop using the App and delete all copies. Provisions intended by their nature to continue (including warranty disclaimers, liability limitations, and venue provisions) will survive.
+      </p>
+      <p>
+        <strong>Future Changes:</strong> We will notify you of material changes before they take effect and obtain your acceptance where required. Changes will not apply retroactively to disputes that arose before their effective date.
+      </p>
+      <h3>9.5 Severability &amp; Entire Agreement</h3>
+      <p>
+        Any unenforceable provision will be severed to the extent necessary; the remainder continues in full force and effect. This Agreement, together with the <a href="bloodhawk-privacy.html" style="color: var(--accuracy-emerald);">BloodHawk™ Privacy Policy</a>, represents the complete agreement between you and Hurley Data and Research Consulting LLC regarding BloodHawk™.
+      </p>
+      <h3>9.6 Contact Information</h3>
+      <div class="address-box">
+        <strong>Hurley Data and Research Consulting LLC</strong><br />
+        Attn: Legal Compliance<br />
+        679 Hickory Circle<br />
+        Wahoo, NE 68066<br />
+        United States of America<br />
+        Email: <a href="mailto:HDRConsulting.support@gmail.com" style="color: var(--nav-cyan);">HDRConsulting.support@gmail.com</a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="index.html" style="color: var(--nav-cyan);">HDR Consulting Home</a> &bull; Copyright &copy; 2026 Hurley Data and Research Consulting LLC &bull; 679 Hickory Circle, Wahoo, NE 68066, USA &bull; All Rights Reserved.<br />
+      BloodHawk™ End User License Agreement (EULA) &mdash; Strictly 18+ Years of Age Only. &bull; <a href="bloodhawk-privacy.html" style="color: var(--accuracy-emerald);">BloodHawk™ Privacy Policy</a>
+    </footer>
+  </div>
+</body>
+</html>

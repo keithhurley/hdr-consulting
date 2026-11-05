@@ -4,8 +4,12 @@ Official organizational website and public legal compliance repository for **Hur
 
 ## Hosted GitHub Pages Site
 - **Corporate Landing Page:** https://keithhurley.github.io/hdr-consulting/
-- **BloodHawk™ End User License Agreement (EULA):** https://keithhurley.github.io/hdr-consulting/eula.html
-- **BloodHawk™ Privacy Policy:** https://keithhurley.github.io/hdr-consulting/privacy.html
+
+### BloodHawk™ Legal & Compliance
+- **BloodHawk™ End User License Agreement (EULA):** https://keithhurley.github.io/hdr-consulting/bloodhawk-eula.html
+- **BloodHawk™ Privacy Policy:** https://keithhurley.github.io/hdr-consulting/bloodhawk-privacy.html
+
+*(Legacy endpoints `eula.html` and `privacy.html` automatically redirect to the BloodHawk-specific documents above).*
 
 ## Corporate Information
 - **Legal Entity:** Hurley Data and Research Consulting LLC
