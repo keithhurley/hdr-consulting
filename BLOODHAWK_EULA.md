@@ -87,7 +87,7 @@ BloodHawk™ is intended exclusively for lawful recreational wildlife recovery. 
 ## 6. Privacy, Local Data & Purchases
 
 ### 6.1 On-Device Processing
-Camera image analysis occurs locally on your device. HDRC does not receive your live camera feed, captured diagnostic photos, or saved recovery trails.
+Camera image analysis occurs locally on your device. HDRC does not receive your live camera feed, captured field calibration photos, or saved recovery trails.
 
 ### 6.2 Third-Party Services & User Exports
 - Online map layers connect directly to public cartographic services (such as USGS National Map and OpenStreetMap) to retrieve tiles requested by your device. For full details on network activity, please review our [Privacy Policy](PRIVACY_POLICY.md).
