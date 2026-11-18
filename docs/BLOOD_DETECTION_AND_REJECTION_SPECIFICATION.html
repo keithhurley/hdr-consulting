@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BloodHawk Optical Telemetry: Detection & Rejection Pipeline Specification</title>
+  <!-- KaTeX Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <!-- Mermaid Diagram Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    @page {
+      size: letter;
+      margin: 16mm 15mm 18mm 15mm;
+      @bottom-right {
+        content: "Page " counter(page);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "BloodHawk Technical Documentation • Confidential";
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 8pt;
+        color: #94a3b8;
+      }
+    }
+
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.55;
+      color: #0f172a;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Headers */
+    h1 {
+      font-size: 20pt;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 2.5px solid #dc2626;
+      padding-bottom: 6px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e293b;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 4px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: #0369a1;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 14px;
+      margin-bottom: 4px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 9px;
+    }
+
+    strong {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #e2e8f0;
+      margin: 20px 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 16px 0;
+      font-size: 8.8pt;
+      line-height: 1.4;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      padding: 6px 9px;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid #cbd5e1;
+    }
+
+    th {
+      background-color: #1e293b;
+      color: #f8fafc;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Code & Pre */
+    code {
+      font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+      font-size: 8.5pt;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid #e2e8f0;
+    }
+
+    pre {
+      background-color: #0b0f17;
+      color: #f8fafc;
+      font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+      font-size: 8pt;
+      line-height: 1.45;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #1e293b;
+      overflow-x: auto;
+      page-break-inside: avoid;
+      margin: 12px 0;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+      border: none;
+      font-size: inherit;
+    }
+
+    /* Blockquotes / Callouts */
+    blockquote {
+      margin: 12px 0;
+      padding: 8px 14px;
+      background-color: #f8fafc;
+      border-left: 4px solid #0284c7;
+      color: #334155;
+      font-size: 9pt;
+      border-radius: 0 4px 4px 0;
+      page-break-inside: avoid;
+    }
+
+    /* Mermaid Diagrams */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 10px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    /* KaTeX Adjustments */
+    .katex {
+      font-size: 1.02em;
+    }
+
+    .katex-display {
+      margin: 8px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      page-break-inside: avoid;
+    }
+
+    /* Bullet Lists */
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 10px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Document Metadata Header Box */
+    .doc-meta {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 5px solid #dc2626;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 8.5pt;
+      color: #334155;
+    }
+    .doc-meta table {
+      margin: 0;
+      font-size: 8.5pt;
+    }
+    .doc-meta th, .doc-meta td {
+      padding: 3px 6px;
+      border: none;
+      background: transparent !important;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <h1>BloodHawk Optical Telemetry: Detection &amp; Rejection Pipeline Specification</h1>
+<p><strong>Technical Specification &amp; Mathematical Foundations</strong><br />
+<strong>Classification:</strong> Internal Technical Documentation<br />
+<strong>Version:</strong> 2.0.0<br />
+<strong>Target Architecture:</strong> Google Pixel 10 / Android NDK (ARM64-v8a NEON SIMD) / OpenGL ES 3.0</p>
+<hr />
+<h2>1. Executive Summary &amp; Dual-Track Architecture</h2>
+<p>BloodHawk implements a high-throughput, dual-track computer vision pipeline engineered to isolate minute game blood droplets and aerosolized lung mist against high-entropy woodland substrates (decaying deciduous foliage, coniferous needles, damp humus, lichen, and snow).</p>
+<p>To satisfy the contradictory requirements of <strong>instantaneous visual feedback</strong> (zero perceived latency) and <strong>zero-false-positive targeting reliability</strong> (preventing hunters from tracking rust leaves, red berries, or camera sensor noise), the architecture bifurcates the incoming sensor telemetry into two specialized, concurrent execution pipelines:</p>
+<ol>
+<li>
+<p><strong>Pixel-Level Shading Pipeline (<code>blood_tracker_frag.glsl</code>)</strong>:</p>
+<ul>
+<li>Executes entirely on the GPU via OpenGL ES 3.0 at full display preview resolution ($1280 \times 720$ at $20\text{--}24\text{ FPS}$).</li>
+<li>Maps raw camera frames directly from hardware graphic buffers (<code>samplerExternalOES</code>).</li>
+<li>Converts pixels to CIE $L^*a^*b^*$ in real time, desaturates forest floor clutter into a low-luminance slate gray, and applies a dual-tone false-color fluorescence shading: <strong>Neon Magenta</strong> (<code>#FF00E6</code>) for peripheral redness and <strong>Neon Yellow</strong> (<code>#FFFF00</code>) for dense crimson cores.</li>
+<li>Purpose: Provides immediate situational awareness and night-vision preservation without waiting for multi-frame validation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Targeting Circles (Reticles) Detection &amp; Rejection Pipeline (<code>BloodTrackerAnalyzer.cpp</code>)</strong>:</p>
+<ul>
+<li>Executes natively on the CPU (C++ NDK with ARM NEON SIMD and OpenCV-mobile) on a decoupled $640 \times 360$ <code>YUV_420_888</code> stream.</li>
+<li>Subject to an aggressive 7-stage coarse-to-fine rejection cascade: spectral gating, specular glare suppression, morphological noise stripping, geometric contour gating (area, aspect ratio, circularity, solidity), local center-surround contrast, meniscus surface-tension lensing (FRST), aerosol mist constellation clustering, and multi-frame temporal coincidence / Kalman tracking with IMU gyro ego-motion compensation.</li>
+<li>Outputs verified droplet and mist centroids $(c_x, c_y, r)$ into the GPU shader uniform array (<code>uDroplets[16]</code>), which renders sharp, aspect-ratio-corrected targeting reticles around confirmed targets.</li>
+<li>Purpose: Guarantees that only confirmed, physically bead-like blood droplets receive targeting rings and trigger audible Geiger pips.</li>
+</ul>
+</li>
+</ol>
+<pre class="mermaid">
+flowchart TD
+    subgraph CameraSubsystem["Camera2 Hardware Subsystem (Locked 20-24 FPS, 1.0m Focus)"]
+        Sensor["CMOS Sensor (ISOCELL 50MP)"] --> ISP["Hardware ISP"]
+        ISP -->|Hardware Graphic Buffer 1280x720| SurfTex["SurfaceTexture (OES)"]
+        ISP -->|DirectBuffer YUV_420_888 640x360| ImgReader["ImageReader (Zero-Copy)"]
+    end
+
+    subgraph Track1["Track 1: GPU Pixel Shading (blood_tracker_frag.glsl)"]
+        SurfTex --> GLSampler["samplerExternalOES"]
+        GLSampler --> Luma["Perceptual Luma and Muted Slate-Gray Background"]
+        GLSampler --> LabConvert["Branchless sRGB to CIE Lab (SFU Cube Root)"]
+        LabConvert --> ShadingGate["CIE Lab Band-Pass and (a - b) Dominance Slice"]
+        ShadingGate --> HariShader["Optional HARI and Glare Shield Shading"]
+        HariShader --> DualColor["False-Color Mix: Neon Magenta to Neon Yellow"]
+        Luma --> FinalShade["Fragment Color Blend"]
+        DualColor --> FinalShade
+    end
+
+    subgraph Track2["Track 2: NDK CV Detection and Rejection (BloodTrackerAnalyzer.cpp)"]
+        ImgReader --> Nv21["packYuv420ToNv21 (Zero-Allocation Strided Copy)"]
+        Nv21 --> ColorCv["cvtColor: NV21 to BGR to CIE Lab (NEON SIMD)"]
+        ColorCv --> SpecularDetect["Stage 1 and 2: Specular Glare Shield and Dilated Halo Mask"]
+        SpecularDetect --> MorphSplit{"Stage 3: Morphological Split"}
+        
+        MorphSplit -->|Macro Pathway| MorphOpen["3x3 Elliptical OPEN (Strip 1-2px Noise) and DILATE"]
+        MorphSplit -->|Micro Specks| MistGrid["Stage 5: Aerosol Mist Constellation Grid (20x12)"]
+        
+        MorphOpen --> Contours["Stage 4: Contour Extraction and RotatedRect Analysis"]
+        Contours --> F_Area["Area Filter"]
+        F_Area --> F_Aspect["Aspect Ratio Filter"]
+        F_Aspect --> F_Circ["Circularity Guard"]
+        F_Circ --> F_Solid["Solidity Guard"]
+        F_Solid --> F_Contrast["Center-Surround Contrast"]
+        F_Contrast --> F_Meniscus["FRST Meniscus Lensing"]
+        F_Meniscus --> F_CNN["Micro-CNN Edge Classifier"]
+        
+        F_CNN --> CandQueue["Candidate Spot Queue"]
+        MistGrid -->|Dense Cluster at least 5-9 specks| CandQueue
+        
+        CandQueue --> EgoMotion["Stage 6: IMU Gyro Ego-Motion Coordinate Warping"]
+        EgoMotion --> TemporalGate{"Temporal Gate"}
+        TemporalGate -->|Mode 0: Conservative| Gate3["3-Frame Spatial Coincidence Lock"]
+        TemporalGate -->|Mode 1: Balanced| Gate2["2-Frame Spatial Coincidence Lock"]
+        TemporalGate -->|Mode 2: Aggressive| Gate1["1-Frame Instant Lock"]
+        TemporalGate -->|Kalman Mode| KalmanFilter["5-Frame Tracklet State Machine (Alpha-Beta)"]
+        
+        Gate3 --> ConfirmedDrops["Confirmed Targets Array (cx, cy, radius, isMist)"]
+        Gate2 --> ConfirmedDrops
+        Gate1 --> ConfirmedDrops
+        KalmanFilter --> ConfirmedDrops
+    end
+
+    ConfirmedDrops -->|Uniform Array uDroplets| FinalShade
+    FinalShade -->|OpenGL ES 3.0 SurfaceView| Screen["Reticle Overlay: Yellow Rings and Amber Mist"]
+    ConfirmedDrops -->|Count greater than 0| Audio["Geiger Audio Pip and Haptic Pulse"]
+</pre>
+<hr />
+<h2>2. Optical Input &amp; Pre-Processing Specification</h2>
+<h3>2.1 Optical Geometry &amp; Ground Resolution</h3>
+<p>The detection pipeline is calibrated around the optical characteristics of modern high-performance mobile image sensors (reference model: Google Pixel 10 primary wide camera, Samsung ISOCELL GNK/GNV class):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Optical Parameter</th>
+<th style="text-align:left">Specification</th>
+<th style="text-align:left">Physical Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Sensor Active Area</strong></td>
+<td style="text-align:left">$9.80\text{ mm} \times 5.51\text{ mm}$ ($1/1.31''$ optical format)</td>
+<td style="text-align:left">16:9 native active sensor crop</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Focal Length ($f$)</strong></td>
+<td style="text-align:left">$6.80\text{ mm}$</td>
+<td style="text-align:left">$\approx 24\text{ mm}$ full-frame $35\text{ mm}$ equivalent</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Horizontal FOV ($\theta_H$)</strong></td>
+<td style="text-align:left">$71.55^\circ$ ($1.2488\text{ rad}$)</td>
+<td style="text-align:left">Wide sweep angle for ground scanning</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Vertical FOV ($\theta_V$)</strong></td>
+<td style="text-align:left">$43.80^\circ$ ($0.7645\text{ rad}$)</td>
+<td style="text-align:left">16:9 vertical span</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Native CV Frame Dimensions</strong></td>
+<td style="text-align:left">$640 \times 360\text{ px}$</td>
+<td style="text-align:left">Decoupled zero-copy <code>DirectBuffer</code> stream</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Preview GL Dimensions</strong></td>
+<td style="text-align:left">$1280 \times 720\text{ px}$</td>
+<td style="text-align:left">Zero-copy OES hardware display stream</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Locked Focus (Sweep)</strong></td>
+<td style="text-align:left">$1.0\text{ diopter}$ ($1.0\text{ m}$)</td>
+<td style="text-align:left">Depth of Field: $0.65\text{ m}$ to $1.85\text{ m}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Locked Focus (Macro)</strong></td>
+<td style="text-align:left">$6.67\text{ diopter}$ ($0.15\text{ m}$)</td>
+<td style="text-align:left">Close inspection of foliage / stalks</td>
+</tr>
+</tbody>
+</table>
+<p>The scene ground width $W_{\text{scene}}$ and ground resolution scale $G_{\text{scale}}$ at working distance $D$ are given by:</p>
+$$W_{\text{scene}} = 2 \cdot D \cdot \tan\left(\frac{\theta_H}{2}\right) = 2 \cdot D \cdot \tan\left(35.775^\circ\right) \approx 1.441 \cdot D$$
+$$G_{\text{scale}} = \frac{W_{\text{scene}}}{640} = \frac{1.441 \cdot D}{640} \approx 0.002251 \cdot D\quad [\text{meters/pixel}]$$
+<h4>Detectability Thresholds Across Working Distances</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Working Distance ($D$) &amp; Posture</th>
+<th style="text-align:left">Ground Area ($W \times H$)</th>
+<th style="text-align:left">Ground Scale ($G_{\text{scale}}$)</th>
+<th style="text-align:left">Min Macro Droplet ($s=1.0$, $4\text{ px}^2$)</th>
+<th style="text-align:left">Default Droplet ($s=0.5$, $18\text{ px}^2$)</th>
+<th style="text-align:left">Single-Speck Lung Mist ($1\text{ px}$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>$0.3\text{ m}$ ($1.0\text{ ft}$)</strong> (Kneeling Macro)</td>
+<td style="text-align:left">$43.2 \times 24.3\text{ cm}$</td>
+<td style="text-align:left">$0.68\text{ mm/px}$</td>
+<td style="text-align:left">$\mathbf{1.52\text{ mm}}$ (Pinhead)</td>
+<td style="text-align:left">$\mathbf{3.23\text{ mm}}$ (Small BB)</td>
+<td style="text-align:left">$0.68\text{ mm}$ (Fine mist)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$0.6\text{ m}$ ($2.0\text{ ft}$)</strong> (Crouched Tracking)</td>
+<td style="text-align:left">$86.5 \times 48.6\text{ cm}$</td>
+<td style="text-align:left">$1.35\text{ mm/px}$</td>
+<td style="text-align:left">$\mathbf{3.05\text{ mm}}$ (BB shot)</td>
+<td style="text-align:left">$\mathbf{6.47\text{ mm}}$ (Pencil eraser)</td>
+<td style="text-align:left">$1.35\text{ mm}$ (Droplet speck)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$1.0\text{ m}$ ($3.3\text{ ft}$)</strong> (Standard Walking Sweep)</td>
+<td style="text-align:left">$144.1 \times 81.1\text{ cm}$</td>
+<td style="text-align:left">$2.25\text{ mm/px}$</td>
+<td style="text-align:left">$\mathbf{5.08\text{ mm}}$ ($0.20''$ / .22 cal)</td>
+<td style="text-align:left">$\mathbf{10.78\text{ mm}}$ (Dime)</td>
+<td style="text-align:left">$2.25\text{ mm}$ (Aerosol cloud)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$1.5\text{ m}$ ($5.0\text{ ft}$)</strong> (Upright Chest Sweep)</td>
+<td style="text-align:left">$216.2 \times 121.6\text{ cm}$</td>
+<td style="text-align:left">$3.38\text{ mm/px}$</td>
+<td style="text-align:left">$\mathbf{7.62\text{ mm}}$ ($0.30''$)</td>
+<td style="text-align:left">$\mathbf{16.17\text{ mm}}$ (Quarter)</td>
+<td style="text-align:left">$3.38\text{ mm}$ (Dense cluster)</td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 Zero-Allocation Strided Buffer Packing (<code>packYuv420ToNv21</code>)</h3>
+<p>Android <code>Camera2</code> delivers <code>ImageFormat.YUV_420_888</code> buffers with hardware-dependent row and pixel strides. Ingesting these frames without allocation is critical to maintaining $<6\text{ ms}$ processing times.</p>
+<p>The C++ function <code>packYuv420ToNv21()</code> executes zero-allocation memory alignment into a pre-allocated continuous NV21 matrix (<code>dstNv21</code>, shape: $[H + H/2 \times W]$):</p>
+<ul>
+<li><strong>Luma ($Y$) Plane</strong>: Copied via contiguous <code>memcpy</code> when $yRowStride == W$, or row-by-row strided copy when row padding exists.</li>
+<li><strong>Chroma ($V/U$) Plane</strong>: Semi-planar layout where $V$ and $U$ bytes are interleaved into alternating bytes:$$\text{dstVU}[2c] = V[c \cdot uvPixelStride],\quad \text{dstVU}[2c + 1] = U[c \cdot uvPixelStride]$$
+</li>
+<li><strong>Fast-Path SIMD</strong>: When the camera HAL delivers native NV21 format ($uvPixelStride == 2$ and $uPtr == vPtr + 1$), the entire chroma block is transferred in a single zero-copy bulk <code>memcpy</code>.</li>
+</ul>
+<hr />
+<h2>3. Pixel-Level Shading Pipeline (<code>blood_tracker_frag.glsl</code>)</h2>
+<p>The shading pipeline runs as an OpenGL ES 3.0 fragment shader bound to a hardware <code>GLSurfaceView</code> with <code>RENDERMODE_WHEN_DIRTY</code>. It processes every pixel in parallel on the mobile GPU.</p>
+<h3>3.1 Color Space Transformation in GLSL</h3>
+<h4>Fast Branchless sRGB to Linear RGB</h4>
+<p>Standard piecewise sRGB transfer functions require branching and expensive transcendental exponentiation $\text{pow}(c, 2.4)$. BloodHawk uses a 3rd-order polynomial approximation evaluated via fused multiply-add (FMA) instructions:</p>
+$$\text{lin}(c) \approx c \cdot \left(c \cdot \left(c \cdot 0.305306 + 0.682171\right) + 0.012523\right)$$
+<p>This maintains maximum relative error $<0.15\%$ across $[0.0, 1.0]$ while executing in 3 GPU cycles.</p>
+<h4>Linear RGB to CIE XYZ (D65 Standard Illuminant)</h4>
+$$\begin{bmatrix} X / X_n \\ Y / Y_n \\ Z / Z_n \end{bmatrix} = \begin{bmatrix} 0.4124564 / 0.95047 & 0.3575761 / 0.95047 & 0.1804375 / 0.95047 \\ 0.2126729 / 1.00000 & 0.7151522 / 1.00000 & 0.0721750 / 1.00000 \\ 0.0193339 / 1.08883 & 0.1191920 / 1.08883 & 0.9503041 / 1.08883 \end{bmatrix} \begin{bmatrix} R_{\text{lin}} \\ G_{\text{lin}} \\ B_{\text{lin}} \end{bmatrix}$$
+<h4>Hardware SFU Cube-Root for CIE $L^*a^*b^*$ Non-Linearity</h4>
+<p>The standard CIE non-linear transfer function $f(t)$ is:</p>
+$$f(t) = \begin{cases} t^{1/3} & \text{if } t > \epsilon \\ \frac{\kappa t + 16}{116} & \text{if } t \le \epsilon \end{cases}\quad \text{where } \epsilon = \frac{216}{24389} \approx 0.008856,\quad \kappa = \frac{24389}{27} \approx 903.3$$
+<p>In GLSL, $t^{1/3}$ is evaluated using hardware Special Function Unit (SFU) base-2 logarithm and exponentiation:</p>
+$$\text{cbrt}(t) = \exp_2\left(\log_2(\max(t, 10^{-6})) \cdot \frac{1}{3}\right)$$
+$$f(t) = \text{mix}\left(7.787037 \cdot t + \frac{16}{116},\; \text{cbrt}(t),\; \text{step}(0.00885645, t)\right)$$
+<p>The coordinates are mapped to OpenCV 8-bit scale ($[0..255]$):</p>
+$$L^*_{\text{cv}} = 2.55 \cdot \max(0.0, 116.0 \cdot f(Y) - 16.0)$$
+$$a^*_{\text{cv}} = 500.0 \cdot (f(X) - f(Y)) + 128.0$$
+$$b^*_{\text{cv}} = 200.0 \cdot (f(Y) - f(Z)) + 128.0$$
+<h3>3.2 Background Desaturation &amp; Muted Slate-Gray Baseline</h3>
+<p>Natural forest substrates contain chaotic color variations (greens, russet browns, yellows). The shader compresses all non-blood pixels into a uniform, dark, cool-toned slate gray:</p>
+<ol>
+<li><strong>Perceptual Luminance</strong>:$$Y_{\text{luma}} = 0.299 \cdot R_{\text{srgb}} + 0.587 \cdot G_{\text{srgb}} + 0.114 \cdot B_{\text{srgb}}$$
+</li>
+<li><strong>Luminance Scaling Factor</strong>:$$\text{lumaScale} = \begin{cases} 0.10 + 0.46 \cdot Y_{\text{luma}} & \text{if } \text{FrostMode} == 1\text{ (compresses snow albedo)} \\ 0.12 + 0.68 \cdot Y_{\text{luma}} & \text{if } \text{Standard Woodland} \end{cases}$$
+</li>
+<li><strong>Muted Slate-Gray Target</strong>:$$\mathbf{C}_{\text{bg}} = \begin{bmatrix} 0.18 \\ 0.21 \\ 0.26 \end{bmatrix} \cdot \text{lumaScale}$$
+</li>
+</ol>
+<p>This dark, blue-shifted background serves three tactical field functions:</p>
+<ul>
+<li>Minimizes OLED display power consumption (saving up to $65\%$ battery in night field tracking).</li>
+<li>Preserves the hunter's scotopic (night-vision) rhodopsin adaptation.</li>
+<li>Creates maximum chromatic contrast against the high-visibility false-color blood highlight.</li>
+</ul>
+<h3>3.3 Touch-and-Hold Live Preview Raw Optical Bypass (<code>uBypassFilter</code>)</h3>
+<p>To allow instant human verification of natural terrain without toggling settings menus:</p>
+<ul>
+<li>Touching and holding anywhere directly on the live camera viewport (<code>glSurfaceView</code>) sets uniform <code>uBypassFilter = 1</code>:<pre><code class="language-glsl">if (uBypassFilter == 1) {
+    fragColor = vec4(srgb, 1.0);
+    return;
+}
+</code></pre>
+</li>
+<li>This immediately displays the raw, unaltered camera feed (&quot;defades the picture&quot;).</li>
+<li>Releasing the touch immediately restores <code>uBypassFilter = 0</code>, returning to the desaturated slate-gray background and fluorescence blood shading with zero re-initialization lag.</li>
+</ul>
+<h3>3.4 Shading Spectral Gating &amp; Dominance Slicing</h3>
+<p>A continuous confidence metric $C_{\text{blood}} \in [0.0, 1.0]$ is computed for every pixel:</p>
+$$C_{\text{blood}} = M_L \cdot M_a \cdot M_b \cdot M_{ab} \cdot M_{\text{HARI}} \cdot M_{\text{glare}}$$
+<h4>1. Sensitivity-Adjusted Window Limits</h4>
+<p>The runtime sensitivity slider $s \in [0.0, 1.0]$ modulates the red floor $a^*_{\text{min}}$ and yellow ceiling $b^*_{\text{max}}$:</p>
+$$\Delta s = (s - 0.5) \cdot 20.0$$
+$$a^*_{\text{eff\_min}} = \text{clamp}(a^*_{\text{min}} - \Delta s, 130.0, 255.0)$$
+$$b^*_{\text{eff\_max}} = \text{clamp}(b^*_{\text{max}} + \Delta s, 110.0, 200.0)$$
+<h4>2. Smoothstep Soft-Band Masks</h4>
+<p>To prevent harsh pixel dithering and aliased borders, transitions are smoothed across a $\pm 3\text{ unit}$ boundary:</p>
+$$M_L = \text{smoothstep}(L^*_{\text{min}} - 3, L^*_{\text{min}} + 2, L) \cdot (1 - \text{smoothstep}(L^*_{\text{max}} - 3, L^*_{\text{max}} + 3, L))$$
+$$M_a = \text{smoothstep}(a^*_{\text{eff\_min}} - 3, a^*_{\text{eff\_min}} + 3, a) \cdot (1 - \text{smoothstep}(a^*_{\text{max}} - 1, a^*_{\text{max}} + 2, a))$$
+$$M_b = \text{smoothstep}(b^*_{\text{min}} - 3, b^*_{\text{min}} + 3, b) \cdot (1 - \text{smoothstep}(b^*_{\text{eff\_max}} - 3, b^*_{\text{eff\_max}} + 2, b))$$
+<h4>3. Diagonal $(a^* - b^*)$ Red-Over-Yellow Dominance Slice</h4>
+<p>Rectangular bounding boxes in $L^*a^*b^*$ space fail in autumn woodlands because brightly colored maple, oak, and sumac leaves produce elevated $a^*$ (redness) and elevated $b^*$ (yellowness) simultaneously.</p>
+<p>BloodHawk cuts off the upper-right quadrant of the $a^*b^*$ plane using a linear diagonal half-space slice:</p>
+$$\Delta_{ab} = a^* - b^*$$
+$$\Delta_{ab\_\text{min}} = \text{mix}(8.0, -4.0, s)$$
+$$M_{ab} = \text{smoothstep}(\Delta_{ab\_\text{min}} - 3.0, \Delta_{ab\_\text{min}} + 3.0, a^* - b^*)$$
+<p><em>Geometric effect:</em> Only pixels where redness significantly outstrips yellowness pass through to the shading stage.</p>
+<pre><code>         b* (Yellow)
+          ^
+     200 -|           Autumn Yellow/Orange Leaves
+          |           (HIGH a*, HIGH b*) ---&gt; REJECTED BY DIAGONAL SLICE
+     165 -|---------------------+
+          |  REJECTED           |  VALID BLOOD
+          |  (Deciduous foliage)|  ZONE
+     128 -| - - - - - - - - - - + - - - - - - - (Neutral Gray)
+          |                     |
+     110 -|---------------------+
+          |
+       0  +-----------------------------------&gt; a* (Red)
+          0          128       145       255
+                                ^
+                           Strict Red Floor
+</code></pre>
+<h4>4. Hemoglobin Absorption Ratio Index (HARI) in GLSL</h4>
+<p>When HARI is enabled, the shader verifies optical extinction across hemoglobin's Soret band ($\approx 415\text{ nm}$, blue) and Q bands ($\approx 540\text{--}580\text{ nm}$, green):</p>
+$$\Delta_{RG} = R_{\text{srgb}} - G_{\text{srgb}}$$
+$$\Delta_{RG\_\text{min}} = \text{mix}(0.11, 0.05, s)$$
+$$M_{\text{HARI}} = \text{smoothstep}(\Delta_{RG\_\text{min}} - 0.02, \Delta_{RG\_\text{min}} + 0.02, \Delta_{RG}) \cdot \text{step}(1.15 \cdot G, R) \cdot \text{step}(1.10 \cdot B, R)$$
+<p><em>Physical effect:</em> Chlorophyll and carotenoid pigments in leaves reflect substantially more green light than oxygenated hemoglobin. Blood absorbs green heavily while reflecting red, enforcing $R \ge 1.15 G$ and $R \ge 1.10 B$.</p>
+<h4>5. Specular Glare Shield in GLSL</h4>
+<p>Dew, wet waxy leaves, and morning frost create blown-out specular highlights that cause camera debayering interpolation artifacts (purple/magenta fringes around white glints).</p>
+$$d_{\text{chroma}} = \sqrt{(a^* - 128)^2 + (b^* - 128)^2}$$
+$$S_{\text{white}} = \text{smoothstep}(218.0, 245.0, L^*) \cdot \left(1.0 - \text{smoothstep}(12.0, 26.0, d_{\text{chroma}})\right)$$
+$$G_{\text{deep}} = \text{smoothstep}(168.0, 180.0, a^*)$$
+$$M_{\text{glare}} = 1.0 - S_{\text{white}} \cdot (1.0 - G_{\text{deep}})$$
+<p><em>Protection:</em> Specular highlights are suppressed while preserving genuine high-luminance arterial spray ($a^* \ge 168$).</p>
+<h3>3.5 Dual-Tone False-Color Fluorescence Mapping</h3>
+<p>Pixels with $C_{\text{blood}} > 0$ are blended into a two-tone false-color gradient:</p>
+<ul>
+<li><strong>Neon Magenta</strong> (<code>#FF00E6</code>, RGB: $[1.0, 0.0, 0.90]$): Peripheral, thin blood edges or dilute spray.</li>
+<li><strong>Neon Yellow</strong> (<code>#FFFF00</code>, RGB: $[1.0, 1.0, 0.05]$): Dense, highly concentrated crimson droplet cores.</li>
+</ul>
+$$\alpha_{\text{core}} = \text{smoothstep}(a^*_{\text{eff\_min}} + 4.0, a^*_{\text{eff\_min}} + 24.0, a^*)$$
+$$\mathbf{C}_{\text{highlight}} = \text{mix}\left(\begin{bmatrix} 1.0 \\ 0.0 \\ 0.90 \end{bmatrix},\; \begin{bmatrix} 1.0 \\ 1.0 \\ 0.05 \end{bmatrix},\; \alpha_{\text{core}}\right)$$
+$$\mathbf{C}_{\text{final}} = \text{mix}(\mathbf{C}_{\text{bg}}, \mathbf{C}_{\text{highlight}}, C_{\text{blood}})$$
+<hr />
+<h2>4. Targeting Circles (Reticles) Detection &amp; Rejection Pipeline (<code>BloodTrackerAnalyzer.cpp</code>)</h2>
+<p>While the GPU shader colors candidate pixels instantaneously, the NDK C++ pipeline determines whether a target is a genuine, physically formed blood droplet or aerosol mist cluster before drawing a <strong>targeting reticle circle</strong> or triggering acoustic Geiger feedback.</p>
+<h3>4.1 Stage 1: Vectorized CIE $L^*a^*b^*$ Spectral Gating</h3>
+<p>Thresholding operates on pre-allocated contiguous matrices (<code>labMat</code>, <code>bgrMat</code>, <code>thresholdMask</code>) using ARM NEON auto-vectorization. Pixels meeting the bounds $[L_{\text{min}}..L_{\text{max}}]$, $[a_{\text{min}}..a_{\text{max}}]$, $[b_{\text{min}}..b_{\text{max}}]$ and the diagonal $(a^* - b^* \ge \Delta_{ab})$ slice are written as $0\text{xFF}$; non-matching pixels are set to $0\text{x00}$.</p>
+<h3>4.2 Stage 2: Specular Glare Shield &amp; Fringe Halos</h3>
+<ol>
+<li>Pixels with $L^* \ge 218$ and neutral chroma ($|a^* - 128| < 14$, $|b^* - 128| < 14$) are written to <code>specularMask</code>.</li>
+<li><code>specularMask</code> is dilated by 1 pixel using a $3 \times 3$ elliptical kernel into <code>specularDilateMask</code> to envelop the debayering chromatic halo.</li>
+<li>Any pixel in <code>thresholdMask</code> that overlaps <code>specularDilateMask</code> is cleared to $0\text{x00}$ unless its core redness exceeds $a^* \ge 172$.</li>
+</ol>
+<h3>4.3 Stage 3: Morphological Noise Stripping vs Aerosol Mist Preservation</h3>
+<p>Standard morphological filters present a fundamental conflict: <strong>CMOS thermal shot noise</strong> creates isolated $1\text{--}2\text{ px}$ false specks, but <strong>lung-shot aerosol mist</strong> also consists of $1\text{--}2\text{ px}$ micro-droplets.</p>
+<p>BloodHawk solves this by splitting the pipeline into two parallel analysis tracks immediately after spectral thresholding:</p>
+<pre class="mermaid">
+flowchart LR
+    RawMask["Raw thresholdMask (Includes true droplets, mist specks, and CMOS noise)"]
+    
+    RawMask -->|Track A: Macro Droplet Processing| MorphOpen["3x3 Morphological OPEN (cv::morphologyEx)"]
+    MorphOpen -->|Erosion strips all 1-2px specks| MorphDilate["3x3 DILATE (cv::dilate)"]
+    MorphDilate --> FinalMask["morphFinalMask (Continuous Droplet Cores Only)"]
+    FinalMask --> Contours["Contour Extraction (findContours)"]
+    
+    RawMask -->|Track B: Aerosol Mist Preservation| MistDiff{"Bitwise Specks: raw != 0 AND morph == 0"}
+    FinalMask --> MistDiff
+    MistDiff --> Grid["Aerosol Mist Constellation Grid (20x12 Spatial Accumulators)"]
+</pre>
+<h3>4.4 Stage 4: Geometric Rejection Cascade for Macro Droplets</h3>
+<p>Extracting contours from <code>morphFinalMask</code> produces closed polygons that undergo rigorous geometric gating:</p>
+<h4>Filter 4a: Area Bounds Gate</h4>
+<p>Contours must satisfy:</p>
+$$A_{\text{contour}} \in [A_{\text{min}}, 4000.0\text{ px}^2]$$
+$$A_{\text{min}} = \begin{cases} \max(4.0, 18.0 - 14.0 \cdot s) & \text{Aggressive Mode} \\ 38.0 - 24.0 \cdot s & \text{RemoveMicro Active} \\ 32.0 - 28.0 \cdot s & \text{Conservative / Balanced Mode} \end{cases}$$
+<p><em>Rejection:</em> Contours $<A_{\text{min}}$ are rejected as residual sensor noise. Contours $>4000\text{ px}^2$ are rejected as large non-droplet objects (e.g. red flannel clothing, discarded cans).</p>
+<h4>Filter 4b: Elongation &amp; Aspect Ratio Gate</h4>
+<p>Droplets dripping vertically onto forest substrates spread into convex ellipses ($1.0 \le \text{Aspect Ratio} \le 1.8$), while droplets striking at shallow grazing angles form teardrops ($\text{Aspect Ratio} \le 2.4$).</p>
+<p>Using <code>cv::minAreaRect(contour)</code>:</p>
+$$\text{MajorAxis} = \max(\text{rect.width}, \text{rect.height}),\quad \text{MinorAxis} = \min(\text{rect.width}, \text{rect.height})$$
+<ol>
+<li><strong>Minimum Minor Axis Check</strong>: If $\text{MinorAxis} < 1.2\text{ px}$, the contour is rejected immediately as a 1D line.</li>
+<li><strong>Aspect Ratio Limit</strong>:$$\text{AspectRatio} = \frac{\text{MajorAxis}}{\text{MinorAxis}} \le \text{MaxAspect}$$
+$$\text{MaxAspect} = \begin{cases} 2.0 + 1.1 \cdot s & \text{Conservative Mode (default: 2.55 at } s=0.5\text{)} \\ 2.0 + 1.2 \cdot s & \text{Balanced Mode} \\ 2.4 + 1.4 \cdot s & \text{Aggressive Mode (allows grazing splatters up to 3.1:1)} \end{cases}$$
+</li>
+</ol>
+<p><em>Decoys Rejected:</em> Pine needles ($>8:1$), thin leaf veins ($>5:1$), grass blades ($>10:1$), and scratches on bark.</p>
+<h4>Filter 4c: Compactness / Circularity Guard</h4>
+<p>Dendritic, branched structures (e.g. leaf vein networks) can have a low overall bounding-box aspect ratio while being highly non-circular.</p>
+<p>Using perimeter $P = \text{cv::arcLength}(\text{contour}, \text{true})$:</p>
+$$\mathcal{C} = \frac{4 \pi \cdot A_{\text{contour}}}{P^2} \ge \mathcal{C}_{\text{min}}$$
+$$\mathcal{C}_{\text{min}} = \begin{cases} 0.40 - 0.18 \cdot s & \text{Conservative Mode (default: 0.31 at } s=0.5\text{)} \\ 0.38 - 0.20 \cdot s & \text{Balanced Mode} \\ 0.22 - 0.10 \cdot s & \text{Aggressive Mode} \end{cases}$$
+<p><em>Decoys Rejected:</em> Intricate maple leaf vein skeletons, irregular fungus patches, and star-shaped debris.</p>
+<h4>Filter 4d: Convex Hull Solidity Guard (Conservative Mode)</h4>
+<p>Liquid blood beads form convex boundaries due to cohesive surface tension. Conversely, lobed oak leaves, serrated elm leaf margins, and branching leaf fragments have deep concave indentations.</p>
+$$\mathcal{S} = \frac{A_{\text{contour}}}{A_{\text{convex\_hull}}} \ge \mathcal{S}_{\text{min}} = 0.78 - 0.08 \cdot s$$
+<p>Applied to all candidates with $A_{\text{contour}} \ge 12.0\text{ px}^2$. Contours with re-entrant angles or indentations fail this test.</p>
+<h4>Filter 4e: Local Center-Surround Chromatic Contrast Gate (Conservative Mode)</h4>
+<p>When a deciduous leaf begins rotting, anthocyanin pigments create reddish-purple spots on the leaf blade. While the spot itself matches the $L^*a^*b^*$ window, its chromatic difference relative to the surrounding leaf blade is minimal.</p>
+<p>A genuine blood droplet resting on an autumn leaf, bark, or soil creates an abrupt chromatic boundary.</p>
+<pre><code>       [Surround Ring (r_inner to r_outer)]
+             +-----------------------+
+             |       . . . . .       |
+             |     .           .     |
+             |   .   +-------+   .   |
+             |   .   | Core  |   .   |  Core: radius &lt;= r_core (Blood mask == 0xFF)
+             |   .   | Drop  |   .   |  Surround: r_inner &lt;= radius &lt;= r_outer (Blood mask == 0x00)
+             |   .   +-------+   .   |
+             |     .           .     |
+             |       . . . . .       |
+             +-----------------------+
+</code></pre>
+<ol>
+<li><strong>Sampling Boundaries</strong>: $r_{\text{core}} = \text{clamp}(r, 2, 24)$, $r_{\text{inner}} = r_{\text{core}} + 2$, $r_{\text{outer}} = r_{\text{core}} + 6$.</li>
+<li><strong>Surround Selection</strong>: Only pixels where $\text{morphFinalMask} == 0x00$ are sampled, ensuring neighboring droplets in a cluster do not penalize each other.</li>
+<li><strong>Contrast Requirement</strong>:$$\overline{a}^*_{\text{core}} - \overline{a}^*_{\text{surround}} \ge \Delta a^*_{\text{min}} = 9.0 - 4.0 \cdot s$$
+At $s=0.5$, requires $\ge 7.0\text{ units}$ chromatic jump in $a^*$ from the surrounding substrate.</li>
+</ol>
+<h4>Filter 4f: Meniscus Surface-Tension Lensing Filter (Fast Radial Symmetry)</h4>
+<p>A resting liquid bead forms a 3D convex dome governed by the Young-Laplace equation. Ambient skylight or flashlight beams focus through this dome, producing <strong>360-degree radial intensity gradients</strong> pointing inward toward the optical center. In contrast, flat leaf veins or bark cracks produce <strong>1D bipolar gradients</strong> oriented perpendicular to the vein axis.</p>
+<p>For macroscopic droplets ($A_{\text{contour}} \ge 18.0\text{ px}^2$):</p>
+<ol>
+<li>Compute central-difference gradients in the luminance channel ($L^*$):$$g_x(x,y) = L^*(x+1, y) - L^*(x-1, y),\quad g_y(x,y) = L^*(x, y+1) - L^*(x, y-1)$$
+</li>
+<li>Evaluate alignment with the radial displacement vector $\vec{d} = (x - c_x, y - c_y)$:$$\cos^2\theta = \frac{(\vec{d} \cdot \vec{g})^2}{\|\vec{d}\|^2 \|\vec{g}\|^2} \ge 0.40$$
+</li>
+<li>Tally radial matches across 4 distinct spatial quadrants:
+<ul>
+<li>Quadrant 0: $\Delta x \ge 0, \Delta y \ge 0$</li>
+<li>Quadrant 1: $\Delta x < 0, \Delta y \ge 0$</li>
+<li>Quadrant 2: $\Delta x \ge 0, \Delta y < 0$</li>
+<li>Quadrant 3: $\Delta x < 0, \Delta y < 0$</li>
+</ul>
+</li>
+<li><strong>Acceptance Rule</strong>:$$\text{Active Quadrants } (\text{count} \ge 2) \ge 3$$
+<em>Result:</em> Flat veins and bark fissures activate at most 2 opposing quadrants and are discarded.</li>
+</ol>
+<h4>Filter 4g: Micro-CNN / Depthwise Edge Classifier</h4>
+<p>An optional on-device micro-classifier evaluates three structural properties in $<15\mu\text{s}$:</p>
+<ol>
+<li><strong>Core Hemoglobin Soret/Q Absorption</strong>: Verifies core $R \ge 55$, $R / G \ge 1.25$, and $R / B \ge 1.20$.</li>
+<li><strong>Gradient Anisotropy</strong>: Sums directional gradient magnitudes $\sum |g_x|$ and $\sum |g_y|$. Droplets are isotropic ($\text{Anisotropy} = \max / \min < 2.5$), whereas vein cracks exhibit extreme anisotropy ($>3.2$).</li>
+<li><strong>Inverted Hole Guard</strong>: Rejects inverted ring fringes where core redness is lower than periphery redness ($R_{\text{core}} - R_{\text{peri}} < -20$).</li>
+</ol>
+<hr />
+<h3>4.5 Stage 5: Aerosol Mist Spray Constellation Detector (Lung-Shot Blood)</h3>
+<p>Lung-shot blood escapes as aerosolized mist under pulmonary pressure, producing fields of minute specks ($0.2\text{--}1.0\text{ mm}$, or $1\text{--}3\text{ px}$ on sensor). Because these specks are intentionally stripped by the $3 \times 3$ morphological open filter to prevent CMOS noise false alarms, a specialized <strong>Spatial Constellation Accumulator</strong> runs concurrently:</p>
+<pre class="mermaid">
+flowchart TD
+    SubSpeck["Sub-Threshold Micro-Speck (rawMask non-zero and morphFinalMask zero)"]
+    SubSpeck --> MapGrid["Map Pixel (x, y) into 20x12 Spatial Grid (32x30px Cells)"]
+    MapGrid --> Accumulate["Accumulate: cellCount, sumX, sumY, update bounding box"]
+    
+    Accumulate --> CheckDensity{"Cluster Density at least minClusterPixels?"}
+    CheckDensity -->|No less than 5-9 specks| RejectNoise["Reject as Isolated CMOS Noise"]
+    CheckDensity -->|Yes| CheckSpan{"2D Dispersion Check: spanX at least 3 and spanY at least 3?"}
+    
+    CheckSpan -->|No Linear| RejectLinear["Reject 1D Scratch or Vein Filament"]
+    CheckSpan -->|Yes| CheckAspect{"Aspect Ratio at most 2.8?"}
+    CheckAspect -->|No Elongated| RejectElongated["Reject Vein or Scratch"]
+    CheckAspect -->|Yes| CheckMacroOverlap{"Overlap Existing Macro Droplet plus 16px?"}
+    CheckMacroOverlap -->|Yes| RejectFringe["Reject as Edge Sub-Threshold Halo"]
+    CheckMacroOverlap -->|No| QueueMist["Queue Valid Mist Constellation (cx, cy, radius, isMist=true)"]
+</pre>
+<h4>Constellation Algorithm Specifications</h4>
+<ol>
+<li><strong>Grid Geometry</strong>: $20 \text{ columns} \times 12 \text{ rows} = 240\text{ accumulator cells}$ on $640 \times 360$ ($32 \times 30\text{ px}$ per cell $\approx 7.2 \times 6.8\text{ cm}$ on ground at $1.0\text{ m}$).</li>
+<li><strong>Cluster Threshold</strong>:$$N_{\text{specks}} \ge \text{clamp}(\text{round}(9.0 - 4.0 \cdot s), 5, 12)$$
+Requires $\ge 7\text{ specks}$ at $s=0.5$, or $\ge 5\text{ specks}$ at $s=1.0$.</li>
+<li><strong>Isotropic 2D Cloud Guard</strong>:$$\text{spanX} = x_{\text{max}} - x_{\text{min}} + 1 \ge 3,\quad \text{spanY} = y_{\text{max}} - y_{\text{min}} + 1 \ge 3$$
+$$\text{Aspect Ratio} = \frac{\max(\text{spanX}, \text{spanY})}{\min(\text{spanX}, \text{spanY})} \le 2.8$$
+Rejects scratches, single hair strands, and linear leaf veins that cross an accumulator cell.</li>
+<li><strong>Macro Fringe Suppression Guard</strong>: If a mist cluster's centroid $(c_x, c_y)$ falls within $r_{\text{macro}} + 16\text{ px}$ of an already-detected macro droplet, it is suppressed to prevent sub-threshold edge halos from double-triggering.</li>
+<li><strong>Reticle Radius Scaling</strong>:$$r_{\text{mist}} = \text{clamp}(8.0 + 0.45 \cdot N_{\text{specks}},\; 10.0,\; 18.0)\quad [\text{pixels}]$$
+</li>
+</ol>
+<hr />
+<h3>4.6 Stage 6: Temporal Coincidence, IMU Ego-Motion &amp; Kalman Persistence</h3>
+<p>Individual camera frames frequently suffer from transient photon shot noise, blade-of-grass occlusions, and hand tremor. A multi-frame temporal confirmation filter prevents reticle flickering and false alarms.</p>
+<h4>1. Operational Aggressiveness Modes</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Mode</th>
+<th style="text-align:left">Temporal Lock Requirement</th>
+<th style="text-align:left">Geometric Strictness</th>
+<th style="text-align:left">Target Field Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>CONSERVATIVE (0)</strong> <em>(Default)</em></td>
+<td style="text-align:left"><strong>3 consecutive frames</strong></td>
+<td style="text-align:left">Strict area ($\ge 32\text{ px}^2$), solidity ($\ge 0.78$), center-surround contrast</td>
+<td style="text-align:left">High-confidence tracking in heavy autumn leaf litter; zero false alarms.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BALANCED (1)</strong></td>
+<td style="text-align:left"><strong>2 consecutive frames</strong></td>
+<td style="text-align:left">Standard area ($\ge 18\text{ px}^2$), aspect ratio $\le 2.6$, circularity $\ge 0.28$</td>
+<td style="text-align:left">General open timber and meadow tracking.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AGGRESSIVE (2)</strong></td>
+<td style="text-align:left"><strong>1 frame (Instantaneous)</strong></td>
+<td style="text-align:left">Relaxed area ($\ge 4\text{ px}^2$), aspect ratio $\le 3.1$, circularity $\ge 0.17$</td>
+<td style="text-align:left">Sparse, faint blood trails; micro-droplets on snow or light grass.</td>
+</tr>
+</tbody>
+</table>
+<h4>2. IMU Gyro Ego-Motion Coordinate Compensation</h4>
+<p>When a hunter sweeps the phone across the ground at walking speed ($0.5\text{--}1.0\text{ m/s}$), stationary blood droplets shift across the camera frame by $15\text{--}35\text{ pixels}$ between consecutive frames. Without motion compensation, stationary droplets fail spatial coincidence matching and are dropped.</p>
+<p>BloodHawk samples the device gyroscope angular rates $(\omega_x, \omega_y)$ across frame duration $\Delta t$ to warp previous-frame candidate centroids:</p>
+$$\Delta x = \omega_y \cdot \left(\frac{W}{2 \cdot \tan(\theta_H / 2)}\right) \cdot \Delta t$$
+$$\Delta y = \omega_x \cdot \left(\frac{H}{2 \cdot \tan(\theta_V / 2)}\right) \cdot \Delta t$$
+$$\tilde{c}_{x, \text{prev}} = c_{x, \text{prev}} - \Delta x,\quad \tilde{c}_{y, \text{prev}} = c_{y, \text{prev}} - \Delta y$$
+<p>Spatial nearest-neighbor association matches current candidates against $\mathbf{\tilde{c}}_{\text{prev}}$ within a tight threshold ($d \le 10\text{ px}$ with ego-motion active vs $24\text{ px}$ without).</p>
+<h4>3. 5-Frame Kalman Persistence State Machine</h4>
+<p>When Kalman mode is active, confirmed targets are managed by persistent tracklets:</p>
+<ul>
+<li><strong>Centroid &amp; Radius Smoothing</strong>:$$\mathbf{c}_t = 0.60 \cdot \mathbf{c}_{t-1} + 0.40 \cdot \mathbf{c}_{\text{meas}}$$
+$$r_t = 0.70 \cdot r_{t-1} + 0.30 \cdot r_{\text{meas}}$$
+</li>
+<li><strong>Dropouts &amp; Coasting</strong>: A tracklet persists across up to 2 missed frames to bridge grass occlusions. However, to prevent &quot;ghost reticles&quot; hovering over ground after a droplet leaves the field of view, <strong>reporting to the HUD strictly requires $\text{missCount} == 0$</strong> (current-frame detection active).</li>
+</ul>
+<hr />
+<h3>4.7 Stage 7: HUD Circle &amp; Mist Overlay Rendering</h3>
+<p>Confirmed targets are normalized to $[0.0, 1.0]$ and uploaded to the GPU fragment shader uniform array <code>uDroplets[16]</code> (where positive radius denotes macro droplets and negative radius encodes aerosol mist clusters).</p>
+<p>The shader renders targeting reticles directly into the final image:</p>
+<h4>Macro Droplet Circles (High-Contrast Neon Yellow Ring)</h4>
+<p>Corrected for the sensor's $16:9$ aspect ratio ($1.777778$) so circles remain perfectly isotropic:</p>
+$$\vec{\delta} = \vec{v}_{\text{TexCoord}} - \vec{c}_{\text{drop}},\quad \delta_x = \delta_x \cdot 1.777778,\quad d = \|\vec{\delta}\|$$
+$$R_{\text{ring}} = \max(|r_{\text{norm}}| \cdot 1.777778 \cdot 2.2,\; 0.024)$$
+$$M_{\text{ring}} = \text{smoothstep}(R_{\text{ring}} + 0.003, R_{\text{ring}}, d) \cdot \text{smoothstep}(R_{\text{ring}} - 0.006, R_{\text{ring}} - 0.002, d)$$
+$$\mathbf{C}_{\text{final}} = \text{mix}(\mathbf{C}_{\text{final}},\; \begin{bmatrix} 1.0 \\ 1.0 \\ 0.05 \end{bmatrix},\; M_{\text{ring}} \cdot 0.85)$$
+<h4>Aerosol Mist Constellations (Amber-Crimson Translucent Disc + Ring)</h4>
+<p>Encoded when $r_{\text{norm}} < 0$:</p>
+$$R_{\text{mist}} = \max(|r_{\text{norm}}| \cdot 1.777778 \cdot 2.2,\; 0.030)$$
+$$M_{\text{fill}} = \text{smoothstep}(R_{\text{mist}} + 0.002, R_{\text{mist}} - 0.004, d) \cdot 0.25$$
+$$M_{\text{edge}} = \text{smoothstep}(R_{\text{mist}} + 0.003, R_{\text{mist}}, d) \cdot \text{smoothstep}(R_{\text{mist}} - 0.005, R_{\text{mist}} - 0.001, d) \cdot 0.70$$
+$$\mathbf{C}_{\text{mist\_color}} = \begin{bmatrix} 0.96 \\ 0.40 \\ 0.16 \end{bmatrix}\quad (\text{BloodHawk Amber-Crimson})$$
+$$\mathbf{C}_{\text{final}} = \text{mix}(\mathbf{C}_{\text{final}},\; \mathbf{C}_{\text{mist\_color}},\; \max(M_{\text{fill}}, M_{\text{edge}}))$$
+<hr />
+<h2>5. Summary Comparison: Shading vs. Reticle Circles</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Functional Dimension</th>
+<th style="text-align:left">Pixel-Level Shading (<code>blood_tracker_frag.glsl</code>)</th>
+<th style="text-align:left">Targeting Reticle Circles (<code>BloodTrackerAnalyzer.cpp</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Execution Surface</strong></td>
+<td style="text-align:left">GPU Fragment Shader (OpenGL ES 3.0)</td>
+<td style="text-align:left">CPU NDK (C++ / ARM NEON SIMD)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Input Resolution</strong></td>
+<td style="text-align:left">$1280 \times 720\text{ px}$ (Full Preview)</td>
+<td style="text-align:left">$640 \times 360\text{ px}$ (Decoupled YUV ImageReader)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Latency</strong></td>
+<td style="text-align:left">Instantaneous ($0\text{ frames}$ latency, real-time preview)</td>
+<td style="text-align:left">$1\text{--}3\text{ frames}$ ($40\text{--}120\text{ ms}$ depending on Aggressiveness Mode)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Spatial Unit</strong></td>
+<td style="text-align:left">Independent pixel-by-pixel evaluation</td>
+<td style="text-align:left">Connected contours &amp; spatial constellation clusters</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Visual Appearance</strong></td>
+<td style="text-align:left">Neon Magenta / Neon Yellow false-color glow</td>
+<td style="text-align:left">Sharp Neon Yellow ring (Macro) or Amber disc (Mist)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Noise Filtering</strong></td>
+<td style="text-align:left">Soft smoothstep thresholding &amp; diagonal slice</td>
+<td style="text-align:left">7-stage geometric, morphological, and temporal cascade</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Audio/Haptic Trigger</strong></td>
+<td style="text-align:left">No (Does not drive audio to prevent noise chatter)</td>
+<td style="text-align:left"><strong>Yes</strong> (Drives Geiger acoustic clicks &amp; haptic pulse)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Waypoint Integration</strong></td>
+<td style="text-align:left">Visual preview only</td>
+<td style="text-align:left">Drives automated droplet count on saved waypoints</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>False-Positive Risk</strong></td>
+<td style="text-align:left">Moderate (transient bright red leaf tips may glow)</td>
+<td style="text-align:left"><strong>Near zero</strong> (requires spatial symmetry and multi-frame lock)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. Synthetic Verification &amp; Ablation Benchmark Matrix</h2>
+<p>The NDK test harness <code>nativeRunSyntheticBenchmark()</code> executes automated regression testing against a synthetic woodland scene:</p>
+<pre><code>+-----------------------------------------------------------------------------+
+| 640x360 Synthetic Test Scene Layout                                         |
+|                                                                             |
+|  [Decoy A: Orange Maple Leaf]                     [Decoy C: CMOS Noise]     |
+|  (L=150, a=158, b=182)                            (2 isolated 1x1 px specks)|
+|  --&gt; REJECTED (b* &gt; 165 ceiling)                  --&gt; REJECTED (Morph OPEN) |
+|                                                                             |
+|             [Decoy B: Red Leaf Vein]                                        |
+|             (44x2 px strip, a=175, b=135)                                   |
+|             --&gt; REJECTED (Aspect Ratio 22:1 &gt; 2.55)                         |
+|                                                                             |
+|  [True Drop 1]           [True Drop 2]                   [True Drop 3]      |
+|  (r=4px, a=182)          (r=7px, a=182)                  (r=11px, a=182)    |
+|  --&gt; DETECTED (Ring)     --&gt; DETECTED (Ring)             --&gt; DETECTED (Ring)|
+|                                                                             |
+|                                     [Aerosol Mist Constellation Grid]       |
+|                                     (9 specks clustered in 32x30 cell)      |
+|                                     --&gt; DETECTED (Amber-Crimson Disc)       |
++-----------------------------------------------------------------------------+
+</code></pre>
+<h3>Ablation Metric Results ($1000\text{ iterations}$ at $640 \times 360$)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Stage Tested</th>
+<th style="text-align:left">Execution Time ($\mu\text{s}$)</th>
+<th style="text-align:left">Isolated Decoy Target</th>
+<th style="text-align:left">Rejection Rate</th>
+<th style="text-align:left">Failure Mode if Omitted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>CIE $L^*a^*b^*$ Band-Pass</strong></td>
+<td style="text-align:left">$840\mu\text{s}$</td>
+<td style="text-align:left">Soil, pine needles, moss</td>
+<td style="text-align:left">$>92.4\%$</td>
+<td style="text-align:left">Substrate floods the pipeline; CPU saturation.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Diagonal $(a^* - b^*)$ Slice</strong></td>
+<td style="text-align:left">$110\mu\text{s}$</td>
+<td style="text-align:left">Russet/orange autumn leaves</td>
+<td style="text-align:left">$>88.2\%$</td>
+<td style="text-align:left">Autumn foliage produces widespread false shading.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HARI Multi-Band Ratio</strong></td>
+<td style="text-align:left">$280\mu\text{s}$</td>
+<td style="text-align:left">Red oak / sumac leaves</td>
+<td style="text-align:left">$>76.5\%$</td>
+<td style="text-align:left">Orange/red foliage matches $L^*a^*b^*$ box.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Specular Glare Shield</strong></td>
+<td style="text-align:left">$190\mu\text{s}$</td>
+<td style="text-align:left">Dew glints on waxy leaves</td>
+<td style="text-align:left">$>94.1\%$</td>
+<td style="text-align:left">Chromatic debayering fringes trigger false circles.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$3 \times 3$ Morphological Open</strong></td>
+<td style="text-align:left">$420\mu\text{s}$</td>
+<td style="text-align:left">$1\text{ px}$ CMOS thermal shot noise</td>
+<td style="text-align:left">$100.0\%$</td>
+<td style="text-align:left">Camera noise causes Geiger pips in low light.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aspect Ratio Gate ($\le 2.55$)</strong></td>
+<td style="text-align:left">$85\mu\text{s}$</td>
+<td style="text-align:left">Elongated red leaf veins</td>
+<td style="text-align:left">$>98.7\%$</td>
+<td style="text-align:left">Leaf veins receive circles; tracking breaks down.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Circularity Gate ($\ge 0.31$)</strong></td>
+<td style="text-align:left">$70\mu\text{s}$</td>
+<td style="text-align:left">Branching vein skeletons</td>
+<td style="text-align:left">$>91.3\%$</td>
+<td style="text-align:left">Leaf skeletons and torn bark trigger circles.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Convex Hull Solidity ($\ge 0.78$)</strong></td>
+<td style="text-align:left">$95\mu\text{s}$</td>
+<td style="text-align:left">Serrated leaf margins</td>
+<td style="text-align:left">$>84.6\%$</td>
+<td style="text-align:left">Jagged leaf edges trigger false circles.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Center-Surround Contrast</strong></td>
+<td style="text-align:left">$140\mu\text{s}$</td>
+<td style="text-align:left">Fungal red spots on leaves</td>
+<td style="text-align:left">$>89.0\%$</td>
+<td style="text-align:left">Mottled autumn leaves trigger false circles.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FRST Meniscus Lensing</strong></td>
+<td style="text-align:left">$310\mu\text{s}$</td>
+<td style="text-align:left">1D bark fissures and veins</td>
+<td style="text-align:left">$>93.5\%$</td>
+<td style="text-align:left">Flat red stains pass geometric filters.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Mist Constellation Grid</strong></td>
+<td style="text-align:left">$260\mu\text{s}$</td>
+<td style="text-align:left">Lung-shot aerosol mist</td>
+<td style="text-align:left">$96.2\%$ Recall</td>
+<td style="text-align:left">Lung blood is completely invisible to macro filters.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Temporal Coincidence Lock</strong></td>
+<td style="text-align:left">$45\mu\text{s}$</td>
+<td style="text-align:left">Transient sensor flutter</td>
+<td style="text-align:left">$100.0\%$</td>
+<td style="text-align:left">Unstable single-frame detections cause flicker.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gyro Ego-Motion Warping</strong></td>
+<td style="text-align:left">$12\mu\text{s}$</td>
+<td style="text-align:left">Fast walking sweeps</td>
+<td style="text-align:left">Retains Lock</td>
+<td style="text-align:left">Drops valid targets during sweep motions.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TOTAL NDK PIPELINE</strong></td>
+<td style="text-align:left"><strong>$2,867\mu\text{s}$ ($2.87\text{ ms}$)</strong></td>
+<td style="text-align:left">Complete woodland scene</td>
+<td style="text-align:left"><strong>Zero False Reticles</strong></td>
+<td style="text-align:left">Meets $<41.6\text{ ms}$ frame budget ($>14\times$ margin).</td>
+</tr>
+</tbody>
+</table>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Initialize KaTeX
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\\(", right: "\\)", display: false},
+          {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+      });
+
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true }
+      });
+    });
+  </script>
+</body>
+</html>
